@@ -21,17 +21,27 @@ const PaymentForm = ({ checkoutToken, nextStep, backStep, shippingData, onCaptur
         } else {
             const orderData = {
                 line_items: checkoutToken.live.line_items,
-                customer: { firstname: shippingData.firstName, lastname: shippingData.lastName, email: shippingData.email },
-                shipping: { name: 'International', street: shippingData.address1, town_city: shippingData.city, county_state: shippingData.shippingSubdivision, postal_zip_code: shippingData.zip, country: shippingData.shippingCountry },
-                fulfillment: { shipping_method: shippingData.shippingOption },
+                customer: { firstname: shippingData.firstName, 
+                            lastname: shippingData.lastName, 
+                            email: shippingData.email 
+                        },
+                shipping: { name: 'International', 
+                            street: shippingData.address, 
+                            town_city: shippingData.city, 
+                            county_state: shippingData.shippingSubdivision, 
+                            postal_zip_code: shippingData.zip, 
+                            country: shippingData.shippingCountry 
+                        },
+                fulfillment: { shipping_method: shippingData.shippingOption 
+                        },
                 payment: {
-                    gateway: 'stripe',
-                    stripe: {
-                    payment_method_id: paymentMethod.id,
+                            gateway: 'stripe',
+                            stripe: {
+                            payment_method_id: paymentMethod.id,
                 },
             },
         };
-    
+            //console.log(orderData)
             onCaptureCheckout(checkoutToken.id, orderData);
 
             timeout()
@@ -47,7 +57,7 @@ const PaymentForm = ({ checkoutToken, nextStep, backStep, shippingData, onCaptur
             <Elements stripe={stripePromise}>
             <ElementsConsumer>
                 {({ elements, stripe }) => (
-                    <form onSubmit={(event) => handleSubmit(event, elements, stripe)}>
+                    <form onSubmit={(e) => handleSubmit(e, elements, stripe)}>
                         <CardElement/>
                         <br />
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>

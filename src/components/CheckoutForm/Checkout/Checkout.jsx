@@ -33,7 +33,7 @@ const Checkout = ({cart, order, onCaptureCheckout, error}) => {
         
             generateToken();
             }
-        }, [cart, activeStep, history]);
+        }, [cart]);
 
 
     const test = (data) => {
@@ -51,7 +51,7 @@ const Checkout = ({cart, order, onCaptureCheckout, error}) => {
     let Confirmation = () => (order.customer ? (
         <>
             <div>
-                <Typography variant="h5">Thank you for your purchase, {order.customer.firstname} {order.customer.lastname}!</Typography>
+                <Typography variant="h5">Thank you for your purchase, {order.customer.firstname} {" "} {order.customer.lastname}!</Typography>
                 <Divider className={classes.divider} />
                 <Typography variant="subtitle2">Order ref: {order.customer_reference}</Typography>
             </div>
@@ -84,15 +84,20 @@ const Checkout = ({cart, order, onCaptureCheckout, error}) => {
             }
 
     const Form = () => activeStep === 0
-        ?<AddressForm checkoutToken={checkoutToken} test={test}/>
-        :<PaymentForm  
+        ? (<AddressForm 
+            checkoutToken={checkoutToken} 
+            // nextStep={nextStep} 
+            // setShippingData={setShippingData} 
+            test={test}
+        /> )
+        : (<PaymentForm  
             shippingData={shippingData} 
             checkoutToken={checkoutToken} 
             nextStep={nextStep}
             backStep={backStep} 
             onCaptureCheckout={onCaptureCheckout}
             timeout={timeout}
-            />
+            />)
 
     
     return (
@@ -103,13 +108,13 @@ const Checkout = ({cart, order, onCaptureCheckout, error}) => {
                 <Paper className={classes.paper}>
                     <Typography variant='h4' align='center'>Checkout</Typography>
                     <Stepper activeStep={activeStep} className={classes.stepper}>
-                        {steps.map((step) => (
-                            <Step key={step}>
-                                <StepLabel>{step}</StepLabel>
+                        {steps.map((label) => (
+                            <Step key={label}>
+                                <StepLabel>{label}</StepLabel>
                             </Step>
                         ))}
                     </Stepper>
-                    {activeStep === steps.length ? <Confirmation /> : checkoutToken &&  <Form />}
+                    {activeStep === steps.length ? (<Confirmation /> ) : ( checkoutToken &&  <Form /> )}
                 </Paper>
             </main>
         </>
